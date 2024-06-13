@@ -44,7 +44,8 @@ arch=$(getconf LONG_BIT)
 if [ $arch -eq 32 ] && [ $CPPBIN = "pppwn64" ] ; then
 CPPBIN="pppwn7"
 fi
-echo -e "\n\n\033[36m
+sudo tee /dev/tty1 << 'EOF'
+\n\n\033[36m
  /$$   /$$ /$$$$$$$  /$$$$$$$   /$$$$$$  /$$   /$$         /$$       /$$$$$$$   /$$$$$$ 
 | $$  | $$| $$__  $$| $$__  $$ /$$__  $$| $$$ | $$        | $$      | $$__  $$ /$$__  $$
 | $$  | $$| $$  \ $$| $$  \ $$| $$  \ $$| $$$$| $$        | $$      | $$  \ $$| $$  \__/
@@ -53,7 +54,8 @@ echo -e "\n\n\033[36m
 | $$  | $$| $$  \ $$| $$  \ $$| $$  | $$| $$\  $$$        | $$      | $$      | $$  \ $$
 |  $$$$$$/| $$  | $$| $$$$$$$/| $$  | $$| $$ \  $$        | $$$$$$$$| $$      |  $$$$$$/
  \______/ |__/  |__/|_______/ |__/  |__/|__/  \__/        |________/|__/       \______/ \033[0m
-\n\033[33mhttps://github.com/TheOfficialFloW/PPPwn\033[0m\n" | sudo tee /dev/tty1
+\n\033[33mhttps://github.com/TheOfficialFloW/PPPwn\033[0m\n
+EOF
 if [ $USBETHERNET = true ] ; then
 	echo '1-1' | sudo tee /sys/bus/usb/drivers/usb/unbind
 	coproc read -t 2 && wait "$!" || true
