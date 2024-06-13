@@ -37,7 +37,9 @@ if [ $arch -eq 32 ] && [ $CPPBIN = "pppwn64" ]; then
     CPPBIN="pppwn7"
 fi
 
-echo -e "\n\n\033[36m
+# ASCII art yang ingin disisipkan
+ASCII_ART='
+\033[36m
  /$$   /$$ /$$$$$$$  /$$$$$$$   /$$$$$$  /$$   /$$         /$$       /$$$$$$$   /$$$$$$ 
 | $$  | $$| $$__  $$| $$__  $$ /$$__  $$| $$$ | $$        | $$      | $$__  $$ /$$__  $$
 | $$  | $$| $$  \ $$| $$  \ $$| $$  \ $$| $$$$| $$        | $$      | $$  \ $$| $$  \__/
@@ -46,8 +48,12 @@ echo -e "\n\n\033[36m
 | $$  | $$| $$  \ $$| $$  \ $$| $$  | $$| $$\  $$$        | $$      | $$      | $$  \ $$
 |  $$$$$$/| $$  | $$| $$$$$$$/| $$  | $$| $$ \  $$        | $$$$$$$$| $$      |  $$$$$$/
  \______/ |__/  |__/|_______/ |__/  |__/|__/  \__/        |________/|__/       \______/ \033[0m
-\n\033[33mhttps://github.com/TheOfficialFloW/PPPwn\033[0m\n" | sudo tee /dev/tty1
+\n'
 
+# Cetak ASCII art ke terminal
+echo -e "$ASCII_ART" | sudo tee /dev/tty1
+
+# Lanjutkan dengan bagian lain dari skrip Anda
 if [ $USBETHERNET = true ]; then
     echo '1-1' | sudo tee /sys/bus/usb/drivers/usb/unbind
     coproc read -t 2 && wait "$!" || true
