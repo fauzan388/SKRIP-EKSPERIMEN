@@ -7,7 +7,7 @@ sudo apt update
 sudo apt install git -y
 sudo rm -f -r SKRIP-EKSPERIMEN
 sudo systemctl stop pipwn
-git clone https://github.com/fauzan388/SKRIP-OLD
+git clone https://github.com/fauzan388/SKRIP-EKSPERIMEN
 sudo mkdir /boot/firmware/
 cd SKRIP-EKSPERIMEN
 sudo cp -r PPPwn /boot/firmware/
