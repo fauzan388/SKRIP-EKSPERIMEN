@@ -1,0 +1,16 @@
+local
+sudo chmod 777 /boot/firmware/PPPwn/install.sh
+sudo bash /boot/firmware/PPPwn/install.sh
+
+remote
+sudo apt update
+sudo apt install git -y
+sudo rm -f -r SKRIP-EKSPERIMEN
+sudo systemctl stop pipwn
+git clone https://github.com/fauzan388/SKRIP-OLD
+sudo mkdir /boot/firmware/
+cd SKRIP-EKSPERIMEN
+sudo cp -r PPPwn /boot/firmware/
+cd /boot/firmware/PPPwn
+sudo chmod 777 *
+sudo bash install.sh
