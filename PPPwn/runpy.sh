@@ -3,14 +3,6 @@
 if [ -f /boot/firmware/PPPwn/config.sh ]; then
 source /boot/firmware/PPPwn/config.sh
 fi
-if [ -z $PYPWN ]; then PYPWN=false; fi
-if [ $PYPWN = true ] ; then
-sudo bash /boot/firmware/PPPwn/runpy.sh
-exit 0
-fi
-if [ -f /boot/firmware/PPPwn/pconfig.sh ]; then
-source /boot/firmware/PPPwn/pconfig.sh
-fi
 if [ -z $INTERFACE ]; then INTERFACE="eth0"; fi
 if [ -z $FIRMWAREVERSION ]; then FIRMWAREVERSION="11.00"; fi
 if [ -z $SHUTDOWN ]; then SHUTDOWN=true; fi
@@ -22,50 +14,29 @@ if [ -z $PPDBG ]; then PPDBG=false; fi
 if [ -z $TIMEOUT ]; then TIMEOUT="5m"; fi
 if [ -z $RESTMODE ]; then RESTMODE=false; fi
 if [ -z $LEDACT ]; then LEDACT="normal"; fi
-if [ -z $XFWAP ]; then XFWAP="1"; fi
-if [ -z $XFGD ]; then XFGD="4"; fi
-if [ -z $XFBS ]; then XFBS="0"; fi
-if [ -z $XFNWB ]; then XFNWB=false; fi
-if [ $XFNWB = true ] ; then
-XFNW="--no-wait-padi"
-else
-XFNW=""
-fi
 PITYP=$(tr -d '\0' </proc/device-tree/model) 
 if [[ $PITYP == *"Raspberry Pi 2"* ]] ;then
 coproc read -t 15 && wait "$!" || true
-CPPBIN="pppwn7"
 VMUSB=false
 elif [[ $PITYP == *"Raspberry Pi 3"* ]] ;then
 coproc read -t 10 && wait "$!" || true
-CPPBIN="pppwn64"
 VMUSB=false
 elif [[ $PITYP == *"Raspberry Pi 4"* ]] ;then
 coproc read -t 5 && wait "$!" || true
-CPPBIN="pppwn64"
 elif [[ $PITYP == *"Raspberry Pi 5"* ]] ;then
 coproc read -t 5 && wait "$!" || true
-CPPBIN="pppwn64"
 elif [[ $PITYP == *"Raspberry Pi Zero 2"* ]] ;then
 coproc read -t 8 && wait "$!" || true
-CPPBIN="pppwn64"
 VMUSB=false
 elif [[ $PITYP == *"Raspberry Pi Zero"* ]] ;then
 coproc read -t 10 && wait "$!" || true
-CPPBIN="pppwn11"
 VMUSB=false
 elif [[ $PITYP == *"Raspberry Pi"* ]] ;then
 coproc read -t 15 && wait "$!" || true
-CPPBIN="pppwn11"
 VMUSB=false
 else
 coproc read -t 5 && wait "$!" || true
-CPPBIN="pppwn64"
 VMUSB=false
-fi
-arch=$(getconf LONG_BIT)
-if [ $arch -eq 32 ] && [ $CPPBIN = "pppwn64" ] && [[ ! $PITYP == *"Raspberry Pi 4"* ]] && [[ ! $PITYP == *"Raspberry Pi 5"* ]] ; then
-CPPBIN="pppwn7"
 fi
 PLED=""
 ALED=""
@@ -84,20 +55,19 @@ if [[ $LEDACT == "status" ]] || [[ $LEDACT == "off" ]] ;then
       LEDACT="normal"
    fi
 fi
-echo -e "\n\n\033[36m _____  _____  _____                               
-|  __ \\|  __ \\|  __ \\                    _     _   
-| |__) | |__) | |__) |_      ___ __    _| |_ _| |_ 
-|  ___/|  ___/|  ___/\\ \\ /\\ / / '_ \\  |_   _|_   _|
-| |    | |    | |     \\ V  V /| | | |   |_|   |_|  
+echo -e "\n\n\033[36m _____  _____  _____                 
+|  __ \\|  __ \\|  __ \\
+| |__) | |__) | |__) |_      ___ __
+|  ___/|  ___/|  ___/\\ \\ /\\ / / '_ \\
+| |    | |    | |     \\ V  V /| | | |
 |_|    |_|    |_|      \\_/\\_/ |_| |_|\033[0m
-\n\033[33mhttps://github.com/TheOfficialFloW/PPPwn\nhttps://github.com/xfangfang/PPPwn_cpp\033[0m\n" | sudo tee /dev/tty1
+\n\033[33mhttps://github.com/TheOfficialFloW/PPPwn\033[0m\n" | sudo tee /dev/tty1
 sudo systemctl stop pppoe
-sudo systemctl stop dtlink
 if [ $USBETHERNET = true ] ; then
 	echo '1-1' | sudo tee /sys/bus/usb/drivers/usb/unbind >/dev/null
-	coproc read -t 1 && wait "$!" || true
+	coproc read -t 2 && wait "$!" || true
 	echo '1-1' | sudo tee /sys/bus/usb/drivers/usb/bind >/dev/null
-	coproc read -t 4 && wait "$!" || true
+	coproc read -t 5 && wait "$!" || true
 	sudo ip link set $INTERFACE up
    else	
 	sudo ip link set $INTERFACE down
@@ -105,7 +75,7 @@ if [ $USBETHERNET = true ] ; then
 	sudo ip link set $INTERFACE up
 fi
 echo -e "\n\033[36m$PITYP\033[92m\nFirmware:\033[93m $FIRMWAREVERSION\033[92m\nInterface:\033[93m $INTERFACE\033[0m" | sudo tee /dev/tty1
-echo -e "\033[92mPPPwn:\033[93m C++ $CPPBIN \033[0m" | sudo tee /dev/tty1
+echo -e "\033[92mPPPwn:\033[93m Python pppwn.py \033[0m" | sudo tee /dev/tty1
 if [ $VMUSB = true ] ; then
  sudo rmmod g_mass_storage
   FOUND=0
@@ -132,9 +102,6 @@ if [ $PPPOECONN = true ] ; then
    echo -e "\033[92mInternet Access:\033[93m Enabled\033[0m" | sudo tee /dev/tty1
 else   
    echo -e "\033[92mInternet Access:\033[93m Disabled\033[0m" | sudo tee /dev/tty1
-fi
-if [ -f /boot/firmware/PPPwn/pwn.log ]; then
-   sudo rm -f /boot/firmware/PPPwn/pwn.log
 fi
 if [[ $LEDACT == "status" ]] ;then
    echo timer | sudo tee $PLED >/dev/null
@@ -208,6 +175,9 @@ if [[ $LEDACT == "status" ]] ;then
 	echo heartbeat | sudo tee $PLED >/dev/null
 	echo timer | sudo tee $ALED >/dev/null
 fi
+sudo ip link set $INTERFACE down
+coproc read -t 5 && wait "$!" || true
+sudo ip link set $INTERFACE up
 if [ -f /boot/firmware/PPPwn/config.sh ]; then
  if  grep -Fxq "PPDBG=true" /boot/firmware/PPPwn/config.sh ; then
    PPDBG=true
@@ -248,7 +218,6 @@ do
  	echo -e "\033[31m\nFailed retrying...\033[0m\n" | sudo tee /dev/tty1
  elif [[ $stdo  == *"Unsupported firmware version"* ]] ; then
  	echo -e "\033[31m\nUnsupported firmware version\033[0m\n" | sudo tee /dev/tty1
-	
 	if [[ $LEDACT == "status" ]] ;then
 	 	echo none | sudo tee $ALED >/dev/null
 	 	echo default-on | sudo tee $PLED >/dev/null
@@ -256,19 +225,17 @@ do
  	exit 1
  elif [[ $stdo  == *"Cannot find interface with name of"* ]] ; then
  	echo -e "\033[31m\nInterface $INTERFACE not found\033[0m\n" | sudo tee /dev/tty1
-	
 	if [[ $LEDACT == "status" ]] ;then
 	 	echo none | sudo tee $ALED >/dev/null
 	 	echo default-on | sudo tee $PLED >/dev/null
 	fi
  	exit 1
  fi
-done < <(timeout $TIMEOUT sudo /boot/firmware/PPPwn/$CPPBIN --interface "$INTERFACE" --fw "${FIRMWAREVERSION//.}" --wait-after-pin $XFWAP --groom-delay $XFGD --buffer-size $XFBS $XFNW)
+done < <(timeout $TIMEOUT sudo python3 /boot/firmware/PPPwn/pppwn.py --interface=$INTERFACE --fw=${FIRMWAREVERSION//.})
 if [[ $LEDACT == "status" ]] ;then
  	echo none | sudo tee $ALED >/dev/null
  	echo default-on | sudo tee $PLED >/dev/null
 fi
-sudo ip link set $INTERFACE down
-coproc read -t 3 && wait "$!" || true
-sudo ip link set $INTERFACE up
 done
+
+
