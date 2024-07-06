@@ -2,7 +2,7 @@
 
 if [ ! -f /boot/firmware/PPPwn/config.sh ]; then
     # Jika Anda memiliki file config.sh, Anda perlu mengedit nilai-nilai ini di file tersebut bukan di sini
-    INTERFACE="en0" 
+    INTERFACE="eth0" 
     FIRMWAREVERSION="11.00" 
     SHUTDOWN=true
     USBETHERNET=false
