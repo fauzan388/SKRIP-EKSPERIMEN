@@ -152,19 +152,19 @@ break;;
 esac
 done
 while true; do
-read -p "$(printf '\r\n\r\n\033[36mWould you like to change the firmware version being used, the default is 11.00\r\n\r\n\033[36m(Y|N)?: \033[0m')" fwset
+read -p "$(printf '\r\n\r\n\033[36mWould you like to change the firmware version being used, the default is 1100\r\n\r\n\033[36m(Y|N)?: \033[0m')" fwset
 case $fwset in
 [Yy]* ) 
 while true; do
-read -p  "$(printf '\033[33mEnter the firmware version [11.00 | 10.01 | 10.00 | 9.60 | 9.00]: \033[0m')" FWV
+read -p  "$(printf '\033[33mEnter the firmware version [1100 | 10.01 | 10.00 | 9.60 | 9.00]: \033[0m')" FWV
 case $FWV in
 "" ) 
  echo -e '\033[31mCannot be empty!\033[0m';;
  * )  
 if grep -q '^[0-9.]*$' <<<$FWV ; then 
 
-if [[ ! "$FWV" =~ ^("11.00"|"10.01"|"10.00"|"9.60"|"9.00")$ ]]  ; then
-echo -e '\033[31mThe version must be 11.00, 10.01, 10.00, 9.60, or 9.00\033[0m';
+if [[ ! "$FWV" =~ ^("1100"|"10.01"|"10.00"|"9.60"|"9.00")$ ]]  ; then
+echo -e '\033[31mThe version must be 1100, 10.01, 10.00, 9.60, or 9.00\033[0m';
 else 
 break;
 fi
@@ -176,8 +176,8 @@ done
 echo -e '\033[32mYou are using '$FWV'\033[0m'
 break;;
 [Nn]* ) 
-echo -e '\033[35mUsing the default setting: 11.00\033[0m'
-FWV="11.00"
+echo -e '\033[35mUsing the default setting: 1100\033[0m'
+FWV="1100"
 break;;
 * ) echo -e '\033[31mPlease answer Y or N\033[0m';;
 esac
@@ -217,7 +217,7 @@ echo '#!/bin/bash
 # raspberry pi ethernet interface
 INTERFACE="'$IFCE'" 
 
-# console firmware version  [11.00 | 10.01 | 10.00 | 9.60 | 9.00]
+# console firmware version  [1100 | 10.01 | 10.00 | 9.60 | 9.00]
 FIRMWAREVERSION="'$FWV'" 
 
 # shutdown pi on successful pppwn  [true | false]
