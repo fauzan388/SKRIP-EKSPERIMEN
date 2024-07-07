@@ -3,7 +3,7 @@
 if [ ! -f /boot/firmware/PPPwn/config.sh ]; then
     # Jika Anda memiliki file config.sh, Anda perlu mengedit nilai-nilai ini di file tersebut bukan di sini
     INTERFACE="eth0" 
-    FIRMWAREVERSION="1100" 
+    FIRMWAREVERSION="11.00" 
     SHUTDOWN=true
     USBETHERNET=false
     PPPOECONN=false
@@ -79,8 +79,7 @@ fi
 
 while true; do
     if [ $USECPP = true ]; then
-        ret=$(sudo /boot/firmware/PPPwn/$CPPBIN --interface eth0 --fw 1100 --stage1 /boot/firmware/PPPwn/stage1_1100.bin --stage2 /boot/firmware/PPPwn/stage2_1100.bin --timeout 10 --auto-retry
-)
+        ret=$(sudo /boot/firmware/PPPwn/$CPPBIN --interface "$INTERFACE" --fw "${FIRMWAREVERSION//.}" --stage1 "/boot/firmware/PPPwn/stage1_$FIRMWAREVERSION.bin" --stage2 "/boot/firmware/PPPwn/stage2_$FIRMWAREVERSION.bin")
     else
         ret=$(sudo python3 /boot/firmware/PPPwn/pppwn.py --interface=$INTERFACE --fw=$FIRMWAREVERSION --stage1=/boot/firmware/PPPwn/stage1_$FIRMWAREVERSION.bin --stage2=/boot/firmware/PPPwn/stage2_$FIRMWAREVERSION.bin)
     fi
